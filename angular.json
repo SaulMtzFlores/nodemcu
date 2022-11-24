@@ -102,5 +102,7 @@
       }
     }
   },
-  "defaultProject": "nodemcu"
+  "cli": {
+    "analytics": false
+  }
 }
