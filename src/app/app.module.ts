@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   declarations: [
@@ -12,10 +11,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    NgxEchartsModule.forRoot({
-      echarts: () => import('echarts')
-    })
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
