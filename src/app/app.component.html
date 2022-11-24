@@ -34,18 +34,16 @@
           </button>
         </div>
         <div class="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-center lg:gap-x-12">
-          <a href="#" class="font-semibold text-gray-900 hover:text-gray-900">Product</a>
+          <a href="#" class="font-semibold text-gray-900 hover:text-gray-900">Tunel</a>
 
-          <a href="#" class="font-semibold text-gray-900 hover:text-gray-900">Features</a>
+          <a href="#" class="font-semibold text-gray-900 hover:text-gray-900">Servidor</a>
 
-          <a href="#" class="font-semibold text-gray-900 hover:text-gray-900">Marketplace</a>
+          <a href="#" class="font-semibold text-gray-900 hover:text-gray-900">Repositorio Servidor</a>
 
-          <a href="#" class="font-semibold text-gray-900 hover:text-gray-900">Company</a>
+          <a href="#" class="font-semibold text-gray-900 hover:text-gray-900">Repositorio Cliente</a>
         </div>
         <div class="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
-          <a href="#"
-            class="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20">Log
-            in</a>
+
         </div>
       </nav>
       <!-- Mobile menu, show/hide based on menu open state. -->
@@ -104,7 +102,7 @@
             <div
               class="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
               <span class="text-gray-600">
-                Conexión a sensor tipo "MDU". <a href="#" class="font-semibold text-indigo-600"><span
+                Conexión a sensor tipo "nombrexd". <a href="#" class="font-semibold text-indigo-600"><span
                     class="absolute inset-0" aria-hidden="true"></span>Leer más respecto a este sensor <span
                     aria-hidden="true">&rarr;</span></a>
               </span>
@@ -112,7 +110,8 @@
           </div>
           <div>
             <h1 class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">
-              Gráfica aquí
+              <div echarts [options]="options" class="demo-chart"></div>
+              NodeMCU
             </h1>
             <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
               Conexión a sensor activa.
