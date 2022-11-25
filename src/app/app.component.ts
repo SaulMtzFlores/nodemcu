@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ApiProvider } from './providers/api';
 
@@ -11,11 +12,13 @@ export class AppComponent {
   options: any;
 
   databaseAPI = 'https://nodemcudbapi.herokuapp.com';
+  ngTunnel = 'https://chess.com'
 
   measures: any = [];
 
   constructor(
-    private apiProvider: ApiProvider
+    private apiProvider: ApiProvider,
+    private http : HttpClient
   ) { }
 
   async ngOnInit(): Promise<any> {
@@ -111,20 +114,41 @@ export class AppComponent {
     return `${hours}:${minutes}:${seconds} ${ampm}`;
   }
 
-  async getValues(){
-    const values = {
-      temperatura: 29 + ~~(Math.random() * (3 - (-3)) + (-3)),
-      humedad: 54 + ~~(Math.random() * (3 - (-3)) + (-3)),
-      fecha: new Date()
+  async getValues():Promise<any>{
+    try {
+      const str = '21312ñ3lkad asd a <p>${T:29, H:54}$</p>213lkj1';
+
+      const indexT = str.lastIndexOf('<p>${T:');
+      const num:number = Number(`${str[indexT+7]}${str[indexT+8]}`);
+      const indexH = str.lastIndexOf('}$</p>');
+      const num2:number = Number(`${str[indexH-2]}${str[indexH-1]}`);
+
+      // try {
+      //   const connect = await this.http.get(this.ngTunnel).toPromise();
+      //   console.log(connect);
+
+      // } catch (error) {
+      //   console.log(JSON.stringify(error));
+      // }
+
+
+
+      const values = {
+        temperatura: num + ~~(Math.random() * (3 - (-3)) + (-3)),
+        humedad: num2 + ~~(Math.random() * (3 - (-3)) + (-3)),
+        fecha: new Date()
+      }
+
+      await this.apiProvider.post({
+        url: `/measures`,
+        auth: false,
+        data: values
+      }, this.databaseAPI);
+
+      return values
+    } catch (error) {
+      console.log(error);
     }
-
-    await this.apiProvider.post({
-      url: `/measures`,
-      auth: false,
-      data: values
-    }, this.databaseAPI);
-
-    return values
   }
 
 
