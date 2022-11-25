@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApiProvider } from './providers/api';
 
 @Component({
   selector: 'app-root',
@@ -8,16 +9,24 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'nodemcu';
   options: any;
-  constructor() { }
+
+  databaseAPI = 'https://nodemcudbapi.herokuapp.com';
+
+  measures: any = [];
+
+  constructor(
+    private apiProvider: ApiProvider
+  ) { }
 
   async ngOnInit(): Promise<any> {
     await this.addingLoop();
+    await this.requests();
   }
 
   async addingLoop(temperatura:any=[], humedad:any=[], xAxisData:any=[]):Promise<any>{
     console.log('Heee');
 
-    const values:any = this.getValues();
+    const values:any = await this.getValues();
     temperatura.push(values.temperatura);
     humedad.push(values.humedad);
     xAxisData.push(this.esdate());
@@ -102,10 +111,31 @@ export class AppComponent {
     return `${hours}:${minutes}:${seconds} ${ampm}`;
   }
 
-  getValues(){
-    return {
+  async getValues(){
+    const values = {
       temperatura: 29 + ~~(Math.random() * (3 - (-3)) + (-3)),
-      humedad: 54 + ~~(Math.random() * (3 - (-3)) + (-3))
+      humedad: 54 + ~~(Math.random() * (3 - (-3)) + (-3)),
+      fecha: new Date()
     }
+
+    await this.apiProvider.post({
+      url: `/measures`,
+      auth: false,
+      data: values
+    }, this.databaseAPI);
+
+    return values
+  }
+
+
+
+  async requests():Promise<any>{
+    const response = await this.apiProvider.get({
+      url: '/measures',
+      auth: false
+    },this.databaseAPI);
+
+    console.log(response.data);
+    this.measures = response.data;
   }
 }

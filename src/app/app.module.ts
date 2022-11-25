@@ -7,6 +7,8 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { RouterModule } from '@angular/router';
 
 import { routes } from './app-routing.module';
+import { ProvidersModule } from './providers/providers.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -14,6 +16,8 @@ import { routes } from './app-routing.module';
   ],
   imports: [
     BrowserModule,
+    ProvidersModule,
+    HttpClientModule,
     RouterModule.forRoot(routes, {
       useHash: false
     }),

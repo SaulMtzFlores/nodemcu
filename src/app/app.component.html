@@ -81,6 +81,16 @@
                 </button>
               </div>
             </form>
+
+            <div class="pt-16">
+              <div *ngFor = "let measure of measures">
+                <p>Temperatura: {{measure.temperatura}}°C.</p>
+                <p>Humedad: {{measure.humedad}}%.</p>
+                <p>Hora: {{measure.fecha}}</p>
+                <hr class="my-4">
+              </div>
+            </div>
+
           </div>
           <div
             class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
