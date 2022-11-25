@@ -9,10 +9,12 @@ import { RouterModule } from '@angular/router';
 import { routes } from './app-routing.module';
 import { ProvidersModule } from './providers/providers.module';
 import { HttpClientModule } from '@angular/common/http';
+import { DatePipe } from './date.pipe';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DatePipe
   ],
   imports: [
     BrowserModule,
@@ -24,6 +26,9 @@ import { HttpClientModule } from '@angular/common/http';
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     })
+  ],
+  exports: [
+    DatePipe
   ],
   providers: [],
   bootstrap: [AppComponent]

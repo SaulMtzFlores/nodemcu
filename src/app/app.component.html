@@ -83,10 +83,13 @@
             </form>
 
             <div class="pt-16">
+              <h1 class="text-2xl font-bold tracking-tight sm:text-center my-4">
+                Base de Datos (Mostrando últimos 10 registros)
+              </h1>
               <div *ngFor = "let measure of measures">
-                <p>Temperatura: {{measure.temperatura}}°C.</p>
-                <p>Humedad: {{measure.humedad}}%.</p>
-                <p>Hora: {{measure.fecha}}</p>
+                <p class="text-1xl">Temperatura: {{measure.temperatura}}°C.</p>
+                <p class="text-1xl">Humedad: {{measure.humedad}}%.</p>
+                <p class="text-1xl">Fecha: {{measure.fecha|esdate:false}}. {{measure.fecha|esdate:true}}</p>
                 <hr class="my-4">
               </div>
             </div>

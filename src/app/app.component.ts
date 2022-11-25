@@ -20,11 +20,11 @@ export class AppComponent {
 
   async ngOnInit(): Promise<any> {
     await this.addingLoop();
-    await this.requests();
+
   }
 
   async addingLoop(temperatura:any=[], humedad:any=[], xAxisData:any=[]):Promise<any>{
-    console.log('Heee');
+    await this.requests();
 
     const values:any = await this.getValues();
     temperatura.push(values.temperatura);
@@ -135,7 +135,6 @@ export class AppComponent {
       auth: false
     },this.databaseAPI);
 
-    console.log(response.data);
     this.measures = response.data;
   }
 }
