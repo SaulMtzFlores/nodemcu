@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ApiProvider } from './providers/api';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,10 @@ export class AppComponent {
 
   measures: any = [];
 
+  form: FormGroup = new FormGroup({
+    url: new FormControl(null)
+  });;
+
   constructor(
     private apiProvider: ApiProvider,
     private http : HttpClient
@@ -23,7 +28,6 @@ export class AppComponent {
 
   async ngOnInit(): Promise<any> {
     await this.addingLoop();
-
   }
 
   async addingLoop(temperatura:any=[], humedad:any=[], xAxisData:any=[]):Promise<any>{
@@ -123,6 +127,7 @@ export class AppComponent {
       const indexH = str.lastIndexOf('}$</p>');
       const num2:number = Number(`${str[indexH-2]}${str[indexH-1]}`);
 
+      console.log('Connection to ', this.ngTunnel);
       // try {
       //   const connect = await this.http.get(this.ngTunnel).toPromise();
       //   console.log(connect);
@@ -151,8 +156,6 @@ export class AppComponent {
     }
   }
 
-
-
   async requests():Promise<any>{
     const response = await this.apiProvider.get({
       url: '/measures',
@@ -160,5 +163,13 @@ export class AppComponent {
     },this.databaseAPI);
 
     this.measures = response.data;
+  }
+
+  setTunel(){
+    const data:any =  this.form.getRawValue();
+    if(!data || !data.url){
+      return;
+    }
+    this.ngTunnel = data.url;
   }
 }

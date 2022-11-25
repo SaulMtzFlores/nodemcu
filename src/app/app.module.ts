@@ -10,6 +10,7 @@ import { routes } from './app-routing.module';
 import { ProvidersModule } from './providers/providers.module';
 import { HttpClientModule } from '@angular/common/http';
 import { DatePipe } from './date.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { DatePipe } from './date.pipe';
   imports: [
     BrowserModule,
     ProvidersModule,
+    ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot(routes, {
       useHash: false
