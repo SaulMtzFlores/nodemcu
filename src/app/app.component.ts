@@ -13,13 +13,16 @@ export class AppComponent {
   options: any;
 
   databaseAPI = 'https://nodemcudbapi.herokuapp.com';
-  ngTunnel = 'https://3365-187-189-248-136.ngrok.io'
+  ngTunnel = ''
 
   measures: any = [];
 
   form: FormGroup = new FormGroup({
-    url: new FormControl(null)
-  });;
+    url: new FormControl('https://corsproxynode.herokuapp.com/')
+  });
+
+  tempRequested:number = 0;
+  humRequested:number = 0;
 
   constructor(
     private apiProvider: ApiProvider,
@@ -31,52 +34,56 @@ export class AppComponent {
   }
 
   async addingLoop(temperatura:any=[], humedad:any=[], xAxisData:any=[]):Promise<any>{
-    await this.requests();
+    if(this.ngTunnel){
+      await this.requests();
+      const values:any = await this.getValues();
+      if(values.temperatura && values.humedad){
+        temperatura.push(values.temperatura);
+        humedad.push(values.humedad);
+        xAxisData.push(this.esdate());
 
-    const values:any = await this.getValues();
-    temperatura.push(values.temperatura);
-    humedad.push(values.humedad);
-    xAxisData.push(this.esdate());
 
+        this.options = {
+          legend: {
+            data: ['Temperatura °C', 'Humedad %'],
+            align: 'left',
+          },
+          tooltip: {},
+          xAxis: {
+            data: xAxisData,
+            silent: false,
+            splitLine: {
+              show: false,
+            },
+          },
+          yAxis: {},
+          series: [
+            {
+              name: 'Temperatura °C',
+              type: 'bar',
+              data: temperatura,
+              animationDelay: (idx) => idx * 10,
+            },
+            {
+              name: 'Humedad %',
+              type: 'bar',
+              data: humedad,
+              animationDelay: (idx) => idx * 10 + 100,
+            },
+          ],
+          animationEasing: 'elasticOut',
+          animationDelayUpdate: (idx) => idx * 5,
+        };
 
-    this.options = {
-      legend: {
-        data: ['Temperatura °C', 'Humedad %'],
-        align: 'left',
-      },
-      tooltip: {},
-      xAxis: {
-        data: xAxisData,
-        silent: false,
-        splitLine: {
-          show: false,
-        },
-      },
-      yAxis: {},
-      series: [
-        {
-          name: 'Temperatura °C',
-          type: 'bar',
-          data: temperatura,
-          animationDelay: (idx) => idx * 10,
-        },
-        {
-          name: 'Humedad %',
-          type: 'bar',
-          data: humedad,
-          animationDelay: (idx) => idx * 10 + 100,
-        },
-      ],
-      animationEasing: 'elasticOut',
-      animationDelayUpdate: (idx) => idx * 5,
-    };
-
-    if(temperatura.length>=10){
-      temperatura.splice(0, 1);
-      humedad.splice(0, 1);
-      xAxisData.splice(0, 1);
+        if(temperatura.length>=10){
+          temperatura.splice(0, 1);
+          humedad.splice(0, 1);
+          xAxisData.splice(0, 1);
+        }
+      }
     }
-    setTimeout(async() => await this.addingLoop(temperatura, humedad, xAxisData), 15000)
+
+    setTimeout(async() => await this.addingLoop(temperatura, humedad, xAxisData), 1000)
   }
 
   esdate(showHour:boolean=true): string {
@@ -120,34 +127,53 @@ export class AppComponent {
 
   async getValues():Promise<any>{
     try {
-      const str = '21312ñ3lkad asd a <p>${T:29, H:54}$</p>213lkj1';
-
-      const indexT = str.lastIndexOf('<p>${T:');
-      const num:number = Number(`${str[indexT+7]}${str[indexT+8]}`);
-      const indexH = str.lastIndexOf('}$</p>');
-      const num2:number = Number(`${str[indexH-2]}${str[indexH-1]}`);
-
-      console.log('Connection to ', this.ngTunnel);
       try {
-
-        const connection = await this.http.get(this.ngTunnel, {
-          headers: {
-            "Access-Control-Allow-Origin" : "*",
-            "ngrok-skip-browser-warning": "true"
-          }
+        const response = await this.http.get<any>(this.ngTunnel, {
+          headers: { 'ngrok-skip-browser-warning': 'true' }
         }).toPromise();
-        console.log(connection)
-
 
       } catch (error) {
-        console.log(JSON.stringify(error));
+        const response:any = JSON.parse(JSON.stringify(error));
+        const html = response.error.text;
+        const htmlTagMatchTemp:string = '${T:<span id="temperature">'
+        const temp = html.indexOf(htmlTagMatchTemp);
+        const htmlTagMatchHum:string = ',H:<span id="humidity">';
+        const hume = html.indexOf(htmlTagMatchHum);
+        const readFromTemp = temp+htmlTagMatchTemp.length;
+        const readFromHum = hume+htmlTagMatchHum.length;
+
+        let tempStr:string='';
+        let humeStr:string='';
+
+        let char:string='';
+        let index = 0;
+        while(true){
+          char = html[readFromTemp+index];
+          if(char==='<'){ break } else { tempStr+=char; }
+          index++;
+        }
+        index = 0; char = '';
+        while(true){
+          char = html[readFromHum+index];
+          if(char === '<'){ break } else { humeStr+=char }
+          index++;
+        }
+
+        console.log('Temperatura: ', tempStr,' Humedad:', humeStr);
+        if(Number(tempStr) && Number(humeStr)){
+          this.tempRequested = Number(tempStr);
+          this.humRequested = Number(humeStr);
+        }else{
+          this.tempRequested = 0;
+          this.humRequested = 0;
+        }
       }
 
 
 
       const values = {
-        temperatura: num + ~~(Math.random() * (3 - (-3)) + (-3)),
-        humedad: num2 + ~~(Math.random() * (3 - (-3)) + (-3)),
+        temperatura: this.tempRequested,
+        humedad: this.humRequested,
         fecha: new Date()
       }
 

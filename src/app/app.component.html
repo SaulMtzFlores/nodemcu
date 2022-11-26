@@ -61,13 +61,24 @@
                     class="absolute inset-0" aria-hidden="true"></span>Más información<span
                     aria-hidden="true">&rarr;</span></a>
               </span>
+
+            </div>
+            <div class="relative overflow-hidden rounded-full py-1.5 px-4 text-sm leading-6 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+              <span class="text-gray-600">
+                CORS Proxy <a href="https://justcors.com/" class="font-semibold text-indigo-600"><span
+                    class="absolute inset-0" aria-hidden="true"></span>Conseguir link<span
+                    aria-hidden="true">&rarr;</span></a>
+              </span>
             </div>
           </div>
           <div>
 
             <div echarts [options]="options" class="demo-chart"></div>
-            <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
+            <p class="mt-6 text-lg leading-8 text-green-600 sm:text-center" *ngIf="ngTunnel" >
               Conexión activa.
+            </p>
+            <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center" *ngIf="!ngTunnel">
+              Desconectado.
             </p>
             <h1 class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">
               NodeMCU ESP32
