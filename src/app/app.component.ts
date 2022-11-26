@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ApiProvider } from './providers/api';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -13,7 +13,7 @@ export class AppComponent {
   options: any;
 
   databaseAPI = 'https://nodemcudbapi.herokuapp.com';
-  ngTunnel = 'https://chess.com'
+  ngTunnel = 'https://3365-187-189-248-136.ngrok.io'
 
   measures: any = [];
 
@@ -76,7 +76,7 @@ export class AppComponent {
       humedad.splice(0, 1);
       xAxisData.splice(0, 1);
     }
-    setTimeout(async() => await this.addingLoop(temperatura, humedad, xAxisData), 1000)
+    setTimeout(async() => await this.addingLoop(temperatura, humedad, xAxisData), 150000)
   }
 
   esdate(showHour:boolean=true): string {
@@ -128,13 +128,22 @@ export class AppComponent {
       const num2:number = Number(`${str[indexH-2]}${str[indexH-1]}`);
 
       console.log('Connection to ', this.ngTunnel);
-      // try {
-      //   const connect = await this.http.get(this.ngTunnel).toPromise();
-      //   console.log(connect);
+      try {
+        const httpOptions = {
+          headers: new HttpHeaders({
+          "Access-Control-Allow-Origin" : "*"
+          })};
+        const connection = await this.http.get(this.ngTunnel, {
+          headers: {
+            "Access-Control-Allow-Origin" : "*",
+            "ngrok-skip-browser-warning": "true"
+          }
+        }).toPromise();
 
-      // } catch (error) {
-      //   console.log(JSON.stringify(error));
-      // }
+
+      } catch (error) {
+        console.log(JSON.stringify(error));
+      }
 
 
 
