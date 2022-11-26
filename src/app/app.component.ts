@@ -76,7 +76,7 @@ export class AppComponent {
       humedad.splice(0, 1);
       xAxisData.splice(0, 1);
     }
-    setTimeout(async() => await this.addingLoop(temperatura, humedad, xAxisData), 150000)
+    setTimeout(async() => await this.addingLoop(temperatura, humedad, xAxisData), 15000)
   }
 
   esdate(showHour:boolean=true): string {
@@ -129,16 +129,14 @@ export class AppComponent {
 
       console.log('Connection to ', this.ngTunnel);
       try {
-        const httpOptions = {
-          headers: new HttpHeaders({
-          "Access-Control-Allow-Origin" : "*"
-          })};
+
         const connection = await this.http.get(this.ngTunnel, {
           headers: {
             "Access-Control-Allow-Origin" : "*",
             "ngrok-skip-browser-warning": "true"
           }
         }).toPromise();
+        console.log(connection)
 
 
       } catch (error) {
